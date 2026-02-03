@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Builder - Client Information Form</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #1a1a1a;
+            color: #e0e0e0;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #2a2a2a;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+        .subtitle {
+            color: #aaa;
+            margin-bottom: 2rem;
+        }
+        .section {
+            margin-bottom: 2.5rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #444;
+        }
+        .section:last-child {
+            border-bottom: none;
+        }
+        h2 {
+            color: #667eea;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #e0e0e0;
+            font-weight: 500;
+        }
+        .required {
+            color: #f093fb;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="url"],
+        input[type="color"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            background: #1a1a1a;
+            border: 1px solid #444;
+            border-radius: 6px;
+            color: #e0e0e0;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus,
+        input[type="url"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        input[type="file"] {
+            padding: 0.5rem;
+            background: #1a1a1a;
+            border: 1px solid #444;
+            border-radius: 6px;
+            color: #e0e0e0;
+        }
+        .color-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .color-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .color-input-wrapper input[type="color"] {
+            width: 60px;
+            height: 40px;
+            cursor: pointer;
+        }
+        .help-text {
+            font-size: 0.875rem;
+            color: #aaa;
+            margin-top: 0.5rem;
+        }
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .btn:hover {
+            background: #5568d3;
+        }
+        .btn-secondary {
+            background: #444;
+        }
+        .btn-secondary:hover {
+            background: #555;
+        }
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+        .repeating-section {
+            background: #1a1a1a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border: 1px solid #333;
+        }
+        .repeating-section h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+        .image-upload-item {
+            background: #1a1a1a;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            border: 1px solid #333;
+        }
+        .image-upload-item label {
+            margin-bottom: 0.5rem;
+        }
+        .image-preview {
+            max-width: 200px;
+            max-height: 200px;
+            margin-top: 0.5rem;
+            border-radius: 6px;
+        }
+        .remove-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+        .remove-btn:hover {
+            background: #c82333;
+        }
+        .note {
+            background: #3a3a3a;
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 4px solid #f093fb;
+            margin-bottom: 1rem;
+        }
+        .note p {
+            color: #e0e0e0;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+        .note code {
+            background: #1a1a1a;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            color: #f093fb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Website Builder - Client Information Form</h1>
+        <p class="subtitle">Please fill out all required fields. Your information will be used to create your website.</p>
+        
+        <form id="websiteForm">
+            <!-- STEP 1: Basic Info -->
+            <div class="section">
+                <h2>Step 1: Basic Information</h2>
+                
+                <div class="form-group">
+                    <label>Company Name or Brand <span class="required">*</span></label>
+                    <input type="text" name="companyName" required placeholder="Your Company Name">
+                </div>
+                
+                <div class="form-group">
+                    <label>Description <span class="required">*</span></label>
+                    <textarea name="description" required placeholder="Describe your business, products, or services..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Color Palette (Optional)</label>
+                    <input type="file" id="colorPaletteFile" name="colorPalette" accept="image/*" style="display: none;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <button type="button" onclick="document.getElementById('colorPaletteFile').click()" style="padding: 0.5rem 1rem; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer;">Choose File</button>
+                        <span id="colorPaletteFileName" style="color: #aaa; font-size: 0.9rem;">No file chosen</span>
+                    </div>
+                    <p class="help-text">Upload an image with your brand colors. We'll extract colors from it automatically.</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>Brand Colors</label>
+                    <div class="color-group">
+                        <div class="color-input-wrapper">
+                            <label style="flex: 1;">Primary Color:</label>
+                            <input type="color" name="brandColorPrimary" value="#667eea">
+                            <input type="text" name="brandColorPrimaryHex" value="#667eea" style="width: 100px;">
+                        </div>
+                        <div class="color-input-wrapper">
+                            <label style="flex: 1;">Secondary Color:</label>
+                            <input type="color" name="brandColorSecondary" value="#764ba2">
+                            <input type="text" name="brandColorSecondaryHex" value="#764ba2" style="width: 100px;">
+                        </div>
+                        <div class="color-input-wrapper">
+                            <label style="flex: 1;">Accent Color:</label>
+                            <input type="color" name="brandColorAccent" value="#f093fb">
+                            <input type="text" name="brandColorAccentHex" value="#f093fb" style="width: 100px;">
+                        </div>
+                    </div>
+                    <p class="help-text">Or manually set your brand colors above. Colors extracted from palette will be available when we import your data.</p>
+                </div>
+            </div>
+            
+            <script>
+                // Update color palette filename display
+                document.addEventListener('DOMContentLoaded', function() {
+                    const colorPaletteFile = document.getElementById('colorPaletteFile');
+                    if (colorPaletteFile) {
+                        colorPaletteFile.addEventListener('change', function(e) {
+                            const fileName = e.target.files[0] ? e.target.files[0].name : 'No file chosen';
+                            const fileNameDisplay = document.getElementById('colorPaletteFileName');
+                            if (fileNameDisplay) {
+                                fileNameDisplay.textContent = fileName;
+                            }
+                        });
+                    }
+                });
+            </script>
+            
+            <!-- STEP 2: Content -->
+            <div class="section">
+                <h2>Step 2: Content & Images</h2>
+                
+                <div class="form-group">
+                    <label>Content Write-Up <span class="required">*</span></label>
+                    <textarea name="contentWriteup" required placeholder="Paste your content here. Use keywords like 'About', 'Bio', 'Mission', 'Values', 'Products', 'Signup', or 'Packages' to create sections. The text following each keyword will become that section's content.
+
+Example:
+About
+We are a company that...
+
+Mission
+Our mission is to...
+
+Products
+We offer the following products..."></textarea>
+                    <p class="help-text">Keywords: About, Bio, Mission, Values, Products, Signup, Packages</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>Logo (optional, max 1)</label>
+                    <div id="logoUpload">
+                        <input type="file" name="logo" accept="image/*" id="logoFile" onchange="handleLogoUpload(event)">
+                        <p class="help-text">Upload your logo image file</p>
+                        <div id="logoPreview"></div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Additional Images (up to 5)</label>
+                    <div id="imageUploads"></div>
+                    <button type="button" class="btn btn-secondary btn-small" onclick="addImageUpload()" id="addImageBtn">+ Add Image</button>
+                    <p class="help-text">For each image, select which section it belongs to (or 'None' for image-only sections)</p>
+                </div>
+            </div>
+            
+            <!-- STEP 3: Links & Contact -->
+            <div class="section">
+                <h2>Step 3: Links & Contact Information</h2>
+                
+                <div class="form-group">
+                    <label>External Links</label>
+                    <input type="text" name="externalLinks" placeholder="https://example.com, https://store.com, https://blog.com">
+                    <p class="help-text">Enter multiple links separated by commas. The first link will be used in navigation.</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>Social Media Links</label>
+                    <input type="url" name="socialMediaFacebook" placeholder="https://facebook.com/yourpage">
+                    <input type="url" name="socialMediaInstagram" placeholder="https://instagram.com/yourpage" style="margin-top: 0.5rem;">
+                    <input type="url" name="socialMediaTwitter" placeholder="https://twitter.com/yourpage" style="margin-top: 0.5rem;">
+                    <input type="url" name="socialMediaLinkedIn" placeholder="https://linkedin.com/company/yourpage" style="margin-top: 0.5rem;">
+                </div>
+                
+                <div class="form-group">
+                    <label>Contact Email <span class="required">*</span></label>
+                    <input type="email" name="contactEmail" required placeholder="contact@example.com">
+                </div>
+                
+                <div class="form-group">
+                    <label>Contact Phone</label>
+                    <input type="tel" name="contactPhone" placeholder="+1 (555) 123-4567">
+                    <p class="help-text">At least one contact method (email or phone) is required</p>
+                </div>
+            </div>
+            
+            <!-- STEP 4: Products (Optional) -->
+            <div class="section">
+                <h2>Step 4: Products (Optional)</h2>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" name="hasProducts" onchange="toggleProducts(this.checked)">
+                        Include Product Section
+                    </label>
+                </div>
+                
+                <div id="productsSection" style="display: none;">
+                    <div class="form-group">
+                        <label>Product Section Label</label>
+                        <input type="text" name="productSectionLabel" value="Products" placeholder="Products">
+                    </div>
+                    
+                    <div id="products">
+                        <!-- Products will be added here -->
+                    </div>
+                    <button type="button" class="btn btn-secondary btn-small" onclick="addProduct()">+ Add Product</button>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn" style="width: 100%; padding: 1rem; font-size: 1rem; margin-top: 2rem;">
+                Export Data
+            </button>
+        </form>
+    </div>
+    
+    <script>
+        let imageUploadCount = 0;
+        let productCount = 0;
+        let logoUploaded = false;
+        
+        const sectionKeywords = ['about', 'bio', 'mission', 'values', 'products', 'signup', 'packages', 'package'];
+        
+        function addImageUpload() {
+            if (imageUploadCount >= 5) {
+                alert('Maximum 5 images allowed');
+                return;
+            }
+            
+            const container = document.getElementById('imageUploads');
+            const item = document.createElement('div');
+            item.className = 'image-upload-item';
+            item.id = `imageUpload_${imageUploadCount}`;
+            
+            const keywordOptions = sectionKeywords.map(kw => 
+                `<option value="${kw}">${kw.charAt(0).toUpperCase() + kw.slice(1)}</option>`
+            ).join('');
+            
+            item.innerHTML = `
+                <label>Image ${imageUploadCount + 1}</label>
+                <input type="file" name="image_${imageUploadCount}" accept="image/*" onchange="handleImagePreview(event, ${imageUploadCount})">
+                <div class="form-group" style="margin-top: 0.5rem;">
+                    <label>Which best describes your image?</label>
+                    <select name="image_${imageUploadCount}_category" required>
+                        <option value="">Select...</option>
+                        ${logoUploaded ? '' : '<option value="logo">Logo</option>'}
+                        ${keywordOptions}
+                        <option value="none">None (Image-only section)</option>
+                    </select>
+                </div>
+                <div id="imagePreview_${imageUploadCount}"></div>
+                <button type="button" class="remove-btn" onclick="removeImageUpload(${imageUploadCount})">Remove Image</button>
+            `;
+            
+            container.appendChild(item);
+            imageUploadCount++;
+            
+            if (imageUploadCount >= 5) {
+                document.getElementById('addImageBtn').style.display = 'none';
+            }
+        }
+        
+        function handleLogoUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                logoUploaded = true;
+                const preview = document.getElementById('logoPreview');
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.innerHTML = `<img src="${e.target.result}" class="image-preview" alt="Logo preview">`;
+                };
+                reader.readAsDataURL(file);
+                
+                // Update all image category dropdowns to remove logo option
+                document.querySelectorAll('select[name^="image_"][name$="_category"]').forEach(select => {
+                    const logoOption = select.querySelector('option[value="logo"]');
+                    if (logoOption) logoOption.remove();
+                });
+            }
+        }
+        
+        function handleImagePreview(event, index) {
+            const file = event.target.files[0];
+            if (file) {
+                const preview = document.getElementById(`imagePreview_${index}`);
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.innerHTML = `<img src="${e.target.result}" class="image-preview" alt="Image preview">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        function removeImageUpload(index) {
+            const item = document.getElementById(`imageUpload_${index}`);
+            if (item) {
+                item.remove();
+                imageUploadCount--;
+                document.getElementById('addImageBtn').style.display = 'block';
+            }
+        }
+        
+        function addProduct() {
+            const container = document.getElementById('products');
+            const product = document.createElement('div');
+            product.className = 'repeating-section';
+            product.innerHTML = `
+                <h3>Product ${productCount + 1}</h3>
+                <div class="form-group">
+                    <label>Product Name</label>
+                    <input type="text" name="product_${productCount}_name" placeholder="Product Name">
+                </div>
+                <div class="form-group">
+                    <label>Product Description</label>
+                    <textarea name="product_${productCount}_description" placeholder="Product description..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Product Image (optional)</label>
+                    <input type="file" name="product_${productCount}_image" accept="image/*" onchange="handleProductImagePreview(event, ${productCount})">
+                    <div id="productImagePreview_${productCount}"></div>
+                </div>
+                <div class="form-group">
+                    <label>Product Link (optional)</label>
+                    <input type="url" name="product_${productCount}_link" placeholder="https://...">
+                </div>
+                <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remove Product</button>
+            `;
+            container.appendChild(product);
+            productCount++;
+        }
+        
+        function handleProductImagePreview(event, index) {
+            const file = event.target.files[0];
+            if (file) {
+                const preview = document.getElementById(`productImagePreview_${index}`);
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.innerHTML = `<img src="${e.target.result}" class="image-preview" alt="Product image preview" style="max-width: 200px; margin-top: 0.5rem;">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        function toggleProducts(checked) {
+            document.getElementById('productsSection').style.display = checked ? 'block' : 'none';
+        }
+        
+        function parseContentWriteup(text) {
+            const sections = [];
+            const lines = text.split('\n').map(line => line.trim()).filter(line => line);
+            
+            let currentSection = null;
+            
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].toLowerCase();
+                const keyword = sectionKeywords.find(kw => line.startsWith(kw));
+                
+                if (keyword) {
+                    // Save previous section if exists
+                    if (currentSection && currentSection.text.trim()) {
+                        sections.push(currentSection);
+                    }
+                    // Start new section
+                    currentSection = {
+                        label: lines[i].charAt(0).toUpperCase() + lines[i].slice(1),
+                        text: ''
+                    };
+                } else if (currentSection) {
+                    // Add to current section
+                    currentSection.text += (currentSection.text ? '\n' : '') + lines[i];
+                }
+            }
+            
+            // Add last section
+            if (currentSection && currentSection.text.trim()) {
+                sections.push(currentSection);
+            }
+            
+            // Fallback: If no keywords found, create single "About" section
+            if (sections.length === 0 && text.trim()) {
+                sections.push({
+                    label: 'About',
+                    text: text.trim()
+                });
+            }
+            
+            return sections;
+        }
+        
+        // Wait for DOM to be ready
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('websiteForm');
+            if (!form) {
+                console.error('Form not found!');
+                return;
+            }
+            
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = {
+                companyName: formData.get('companyName'),
+                description: formData.get('description'),
+                brandColors: {
+                    primary: formData.get('brandColorPrimaryHex') || formData.get('brandColorPrimary'),
+                    secondary: formData.get('brandColorSecondaryHex') || formData.get('brandColorSecondary'),
+                    accent: formData.get('brandColorAccentHex') || formData.get('brandColorAccent')
+                },
+                contentSections: [],
+                navigation: [],
+                products: [],
+                contact: {
+                    email: formData.get('contactEmail'),
+                    phone: formData.get('contactPhone')
+                },
+                socialMedia: {
+                    facebook: formData.get('socialMediaFacebook') || '',
+                    instagram: formData.get('socialMediaInstagram') || '',
+                    twitter: formData.get('socialMediaTwitter') || '',
+                    linkedIn: formData.get('socialMediaLinkedIn') || ''
+                },
+                socialMediaFacebook: formData.get('socialMediaFacebook') || '',
+                socialMediaInstagram: formData.get('socialMediaInstagram') || '',
+                socialMediaTwitter: formData.get('socialMediaTwitter') || '',
+                socialMediaLinkedIn: formData.get('socialMediaLinkedIn') || '',
+                contactEmail: formData.get('contactEmail') || '',
+                contactPhone: formData.get('contactPhone') || ''
+            };
+            
+            // Parse content writeup
+            const writeup = formData.get('contentWriteup');
+            if (writeup) {
+                data.contentSections = parseContentWriteup(writeup);
+            }
+            
+            // Parse external links (store but don't add to navigation)
+            const linksStr = formData.get('externalLinks') || '';
+            const links = linksStr.split(',').map(link => link.trim()).filter(link => link);
+            if (links.length > 0) {
+                // Store all links but don't add to navigation
+                data.externalLinks = links;
+            }
+            
+            // Only add first 2 sections to navigation (no extra "About" - use sections as-is)
+            if (data.contentSections.length > 0) {
+                // Take first 2 sections only
+                const sectionsToAdd = data.contentSections.slice(0, 2);
+                sectionsToAdd.forEach(section => {
+                    if (section.label && section.label.trim()) {
+                        // Create section ID from label
+                        const sectionId = section.label.toLowerCase().replace(/\s+/g, '-');
+                        data.navigation.push({ 
+                            type: 'section', 
+                            label: section.label, 
+                            target: sectionId 
+                        });
+                    }
+                });
+            }
+            
+            // Initialize files array for collecting all uploaded files
+            const files = [];
+            
+            // Handle color palette
+            const colorPaletteFile = document.getElementById('colorPaletteFile').files[0];
+            if (colorPaletteFile) {
+                const filename = `color-palette${getFileExtension(colorPaletteFile.name)}`;
+                files.push({ file: colorPaletteFile, filename, category: 'color-palette' });
+                data.colorPalette = filename;
+            }
+            
+            // Handle logo
+            const logoFile = document.getElementById('logoFile').files[0];
+            if (logoFile) {
+                const filename = `logo${getFileExtension(logoFile.name)}`;
+                files.push({ file: logoFile, filename, category: 'logo' });
+                data.logo = filename;
+            }
+            
+            // Handle images
+            for (let i = 0; i < imageUploadCount; i++) {
+                const fileInput = document.querySelector(`input[name="image_${i}"]`);
+                const categorySelect = document.querySelector(`select[name="image_${i}_category"]`);
+                
+                if (fileInput && fileInput.files[0] && categorySelect && categorySelect.value) {
+                    const file = fileInput.files[0];
+                    const category = categorySelect.value;
+                    const filename = `image_${i}${getFileExtension(file.name)}`;
+                    files.push({ file, filename, category });
+                    
+                    // Associate image with section
+                    if (category !== 'logo' && category !== 'none') {
+                        const section = data.contentSections.find(s => 
+                            s.label.toLowerCase().includes(category)
+                        );
+                        if (section) {
+                            if (!section.images) section.images = [];
+                            section.images.push({ filename, category });
+                        }
+                    } else if (category === 'none') {
+                        // Image-only section - no label needed
+                        if (!data.contentSections.find(s => s.label === '' && s.text === '')) {
+                            data.contentSections.push({
+                                label: '', // No label for image-only sections
+                                text: '',
+                                images: [{ filename, category: 'none' }]
+                            });
+                        } else {
+                            // Add to existing image-only section
+                            const imageOnlySection = data.contentSections.find(s => s.label === '' && s.text === '');
+                            if (imageOnlySection && !imageOnlySection.images) {
+                                imageOnlySection.images = [];
+                            }
+                            if (imageOnlySection) {
+                                imageOnlySection.images.push({ filename, category: 'none' });
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // Handle products
+            if (formData.get('hasProducts')) {
+                data.productSectionLabel = formData.get('productSectionLabel') || 'Products';
+                for (let i = 0; i < productCount; i++) {
+                    const name = formData.get(`product_${i}_name`);
+                    if (name) {
+                        const productData = {
+                            name,
+                            description: formData.get(`product_${i}_description`) || '',
+                            link: formData.get(`product_${i}_link`) || ''
+                        };
+                        
+                        // Handle product image
+                        const productImageInput = document.querySelector(`input[name="product_${i}_image"]`);
+                        if (productImageInput && productImageInput.files[0]) {
+                            const productImageFile = productImageInput.files[0];
+                            const productImageFilename = `product_${i}${getFileExtension(productImageFile.name)}`;
+                            files.push({ file: productImageFile, filename: productImageFilename, category: 'product' });
+                            productData.imageFilename = productImageFilename;
+                        }
+                        
+                        data.products.push(productData);
+                    }
+                }
+            }
+            
+            // Convert to JSON
+            const json = JSON.stringify(data, null, 2);
+            
+            // Create zip file
+            const zip = new JSZip();
+            zip.file('website-builder-data.json', json);
+            
+            // Add images to zip
+            for (const { file, filename } of files) {
+                const imageData = await file.arrayBuffer();
+                zip.file(`images/${filename}`, imageData);
+            }
+            
+            // Generate zip file
+            const zipBlob = await zip.generateAsync({ type: 'blob' });
+            
+            // Create filename with timestamp and company name
+            const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+            const companyName = (data.companyName || 'client').replace(/[^a-z0-9]/gi, '-').toLowerCase();
+            const zipFilename = `${companyName}-${timestamp}.zip`;
+            
+            // Try to submit to backend API first (if available)
+            // This allows automatic submission when backend is running
+            const API_BASE = window.location.origin.includes('localhost') || window.location.protocol === 'file:'
+                ? 'http://localhost:8000/api'
+                : '/api';
+            
+            try {
+                // Try to submit via API
+                const formData = new FormData();
+                formData.append('file', zipBlob, zipFilename);
+                
+                const response = await fetch(`${API_BASE}/submit-client-form`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    alert(`✅ Submission sent successfully!\n\nYour website data has been received and will appear in the Website Builder app shortly.\n\nFile: ${zipFilename}`);
+                    return; // Success - don't download
+                } else {
+                    // API not available or error - fall back to download
+                    throw new Error('API submission failed');
+                }
+            } catch (err) {
+                // Backend not available or error - download file instead
+                console.log('API submission not available, downloading file:', err);
+                console.error('Error details:', err);
+                
+                // Show helpful message
+                const errorMsg = err.message || 'Backend not available';
+                const instructions = `Could not submit automatically (${errorMsg}).\n\nWould you like to download the file instead?\n\n📁 IMPORTANT: Create a temporary folder (e.g., "tmp" on your Desktop) to save this file.\n\nThen:\n1. Save the zip file to your temporary folder\n2. Email the zip file to your website builder\n3. They will import it into the Website Builder app\n\nAlternatively, if you have access to the app:\n- Move the file to: ~/WebsiteBuilder/pending/`;
+                if (confirm(instructions)) {
+                    downloadZip(zipBlob, zipFilename);
+                }
+            }
+            }); // Close submit handler
+        }); // Close DOMContentLoaded
+        
+        function getFileExtension(filename) {
+            return filename.substring(filename.lastIndexOf('.'));
+        }
+        
+        function downloadZip(zipBlob, filename) {
+            // Download zip file
+            const url = URL.createObjectURL(zipBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            link.click();
+            URL.revokeObjectURL(url);
+            
+            // Check if opened from Electron app
+            const urlParams = new URLSearchParams(window.location.search);
+            const isElectron = urlParams.get('electron') === 'true';
+            
+            if (isElectron) {
+                const userHome = window.location.hostname === '' ? '~' : (navigator.platform.includes('Mac') ? '~/WebsiteBuilder/pending' : '%USERPROFILE%\\WebsiteBuilder\\pending');
+                alert(`✅ Zip file downloaded!\n\nFile: ${filename}\nLocation: Your Downloads folder\n\nTo automatically import:\n1. Open Finder and go to your Home folder\n2. Look for "WebsiteBuilder" folder\n3. Open the "pending" folder inside it\n4. Drag the downloaded file there\n\nFull path: ~/WebsiteBuilder/pending/\n\nThe app will detect it automatically!`);
+            } else {
+                alert(`✅ Zip file downloaded!\n\nFile: ${filename}\nLocation: Your Downloads folder\n\n📁 IMPORTANT: Create a temporary folder (e.g., "tmp" on your Desktop) to organize this file.\n\nThen:\n1. Move the zip file from Downloads to your temporary folder\n2. Email the zip file to your website builder\n3. They will import it into the Website Builder app\n\nNote: Keep the temporary folder until you confirm the file was received.`);
+            }
+        }
+    </script>
+</body>
+</html>

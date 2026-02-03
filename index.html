@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Builder - Client Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        .container {
+            background: white;
+            border-radius: 16px;
+            padding: 3rem;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+        }
+        p {
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+        .button {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        .button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+        .info {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #f5f5f5;
+            border-radius: 8px;
+            text-align: left;
+        }
+        .info h2 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        .info ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .info li {
+            padding: 0.5rem 0;
+            color: #666;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        .info li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Website Builder</h1>
+        <p>Fill out the form below to provide all the information needed to create your website.</p>
+        <a href="website-builder-form.html" class="button">Start Form →</a>
+        
+        <div class="info">
+            <h2>What you'll need:</h2>
+            <ul>
+                <li>Company name and description</li>
+                <li>Brand colors (or upload a color palette)</li>
+                <li>Logo image</li>
+                <li>Content write-up (we'll parse it into sections)</li>
+                <li>Up to 5 additional images</li>
+                <li>External links and social media</li>
+                <li>Contact information (email or phone)</li>
+                <li>Product information (optional)</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

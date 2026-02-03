@@ -1,0 +1,12 @@
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Editor files
+.vscode/
+.idea/
+
+# No build files needed - form is standalone HTML
