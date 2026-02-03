@@ -206,7 +206,7 @@
         <h1>Website Builder - Client Information Form</h1>
         <p class="subtitle">Please fill out all required fields. Your information will be used to create your website.</p>
         <div style="background: #2a4a2a; border: 1px solid #4a6a4a; border-radius: 8px; padding: 1rem; margin-bottom: 2rem;">
-            <p style="color: #a0e0a0; margin: 0; font-size: 0.95rem;"><strong>📧 After submitting:</strong> If the form downloads a zip file instead of submitting automatically, please email it to your website builder. The file will be in your Downloads folder.</p>
+            <p style="color: #a0e0a0; margin: 0; font-size: 0.95rem;"><strong>📧 After submitting:</strong> This form will download a zip file to your Downloads folder. Please attach it to an email and send it to your website builder to complete your request.</p>
         </div>
         
         <form id="websiteForm">
@@ -740,6 +740,7 @@ We offer the following products..."></textarea>
                 });
                 
                 if (response.ok) {
+                    // This only happens if opened from the app with backend running
                     const result = await response.json();
                     alert(`✅ Submission sent successfully!\n\nYour website data has been received and will appear in the Website Builder app shortly.\n\nFile: ${zipFilename}`);
                     return; // Success - don't download
@@ -748,16 +749,10 @@ We offer the following products..."></textarea>
                     throw new Error('API submission failed');
                 }
             } catch (err) {
-                // Backend not available or error - download file instead
-                console.log('API submission not available, downloading file:', err);
-                console.error('Error details:', err);
-                
-                // Show helpful message
-                const errorMsg = err.message || 'Backend not available';
-                const instructions = `Could not submit automatically (${errorMsg}).\n\nWould you like to download the file instead?\n\n📧 NEXT STEPS:\n1. The zip file will download to your Downloads folder\n2. Find the file (${zipFilename})\n3. Attach it to an email and send it to your website builder\n4. They will import it and create your website\n\n💡 TIP: You can create a temporary folder (e.g., "tmp" on your Desktop) to organize the file before emailing.`;
-                if (confirm(instructions)) {
-                    downloadZip(zipBlob, zipFilename);
-                }
+                // Backend not available - this is the normal flow for clients
+                // Just download the file directly without asking
+                console.log('Downloading file for email submission:', err);
+                downloadZip(zipBlob, zipFilename);
             }
             }); // Close submit handler
         }); // Close DOMContentLoaded
@@ -783,7 +778,8 @@ We offer the following products..."></textarea>
                 const userHome = window.location.hostname === '' ? '~' : (navigator.platform.includes('Mac') ? '~/WebsiteBuilder/pending' : '%USERPROFILE%\\WebsiteBuilder\\pending');
                 alert(`✅ Zip file downloaded!\n\nFile: ${filename}\nLocation: Your Downloads folder\n\nTo automatically import:\n1. Open Finder and go to your Home folder\n2. Look for "WebsiteBuilder" folder\n3. Open the "pending" folder inside it\n4. Drag the downloaded file there\n\nFull path: ~/WebsiteBuilder/pending/\n\nThe app will detect it automatically!`);
             } else {
-                alert(`✅ Zip file downloaded!\n\nFile: ${filename}\nLocation: Your Downloads folder\n\n📧 NEXT STEPS:\n1. Find the zip file in your Downloads folder\n2. Attach it to an email\n3. Send it to your website builder\n4. They will import it and create your website\n\n💡 TIP: You can create a temporary folder (e.g., "tmp" on your Desktop) to organize the file before emailing.`);
+                // This is the normal flow for clients using GitHub Pages
+                alert(`✅ Zip file downloaded!\n\nFile: ${filename}\nLocation: Your Downloads folder\n\n📧 NEXT STEPS:\n1. Find the zip file in your Downloads folder\n2. Attach it to an email\n3. Send it to your website builder\n4. They will import it and create your website\n\n💡 TIP: You can create a temporary folder (e.g., "tmp" on your Desktop) to organize the file before emailing.\n\nYour website builder will receive the file and create your website!`);
             }
         }
     </script>
